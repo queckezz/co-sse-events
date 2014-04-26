@@ -12,8 +12,8 @@ describe('emitter-sse', function () {
     co(function *(){
       var event;
       while (event = yield sse(emitter)) {
-        event.msg.should.containEql('event: ')
-        event.msg.should.containEql('data: ')
+        event.out.should.containEql('event: ')
+        event.out.should.containEql('data: ')
 
         if ('foo' == event.type) done()
       }
@@ -26,8 +26,8 @@ describe('emitter-sse', function () {
     co(function *(){
       var event
       while (event = yield sse(emitter)) {
-        event.msg.should.containEql('event: ')
-        event.msg.should.not.containEql('data: ')
+        event.out.should.containEql('event: ')
+        event.out.should.not.containEql('data: ')
 
         if ('end' == event.type) done();
       }

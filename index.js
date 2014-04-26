@@ -25,7 +25,6 @@ module.exports = function (e, retry) {
       // event with no args
       if (args.length == 0) {
         msg += send('event', type)
-        msg += end()
       }
 
       // event with data
@@ -34,11 +33,9 @@ module.exports = function (e, retry) {
 
         msg += send('event', type)
         msg += send('data', arg)
-
-        if (i == args.length - 1) return;
-
-        msg += end()
       })
+
+      msg += end()
 
       done(null, {
         type: type,
@@ -50,7 +47,7 @@ module.exports = function (e, retry) {
 
 /**
  * Format to an sse line.
- * 
+ *
  * @param {String} type
  * @param {Array} args
  */

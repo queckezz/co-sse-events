@@ -3,8 +3,8 @@
  * Module dependencies.
  */
 
-var assert = require('assert');
-var slice = [].slice;
+var assert = require('assert')
+var slice = [].slice
 
 /**
  * Wrap emitter and return sse events.
@@ -14,32 +14,32 @@ var slice = [].slice;
  * @api public
  */
 
-module.exports = function (e, retry) {
+module.exports = function (e) {
   return function (done) {
     var emit = e.emit
 
     e.emit = function (type) {
       var args = slice.call(arguments, 1)
-      var msg = ''
+      var out = ''
 
-      // event with no args
+      // event with no arguments
       if (args.length == 0) {
-        msg += send('event', type)
+        out += send('event', type)
       }
 
-      // event with data
+      // event with arguments
       args.forEach(function (arg, i) {
         if (typeof arg == 'object') arg = JSON.stringify(arg);
 
-        msg += send('event', type)
-        msg += send('data', arg)
+        out += send('event', type)
+        out += send('data', arg)
       })
 
-      msg += end()
+      out += end()
 
       done(null, {
         type: type,
-        msg: msg
+        out: out
       })
     }
   }

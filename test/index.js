@@ -14,7 +14,8 @@ describe('emitter-sse', function () {
     var event = yield sse(emitter)
     event.type.should.containEql('foo')
     event.out.should.containEql('event: ')
-    event.out.should.containEql('data: ')
+    event.out.should.containEql('data: 1')
+    event.out.should.containEql('data: 2')
   })
 
   it('should work with no arguments', function *() {
@@ -23,7 +24,7 @@ describe('emitter-sse', function () {
     })
 
     var event = yield sse(emitter)
-    event.out.should.containEql('event: ')
+    event.out.should.containEql('event: end')
   })
 
   it('should work with multiple emits', function *() {

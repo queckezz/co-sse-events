@@ -17,7 +17,7 @@ var emitter = new Emitter;
 
 var e;
 while (e = yield sse(emitter)) {
-  console.log(e.msg)
+  console.log(e.out)
   /* ->
    *   event: test
    *   data: { some: prop }

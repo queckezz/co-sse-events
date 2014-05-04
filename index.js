@@ -5,6 +5,7 @@
  * Module dependencies.
  */
 
+let arr = require('array-iterator')
 let Queue = require('co-queue')
 let assert = require('assert')
 let slice = [].slice
@@ -36,7 +37,7 @@ module.exports = function (e) {
     }
 
     // event with arguments
-    for (let arg in args) {
+    for (let arg of arr(args)) {
       if (typeof arg == 'object') arg = JSON.stringify(arg);
       out += send('event', type)
       out += send('data', arg)

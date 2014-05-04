@@ -8,6 +8,7 @@
     "co-mocha": "0.0.2"
   },
   "dependencies": {
+    "array-iterator": "0.0.1",
     "co-queue": "^2.0.0"
   }
 }

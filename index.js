@@ -3,11 +3,18 @@
  * Module dependencies.
  */
 
+var Queue = require('co-queue')
 var assert = require('assert')
 var slice = [].slice
 
 /**
- * Wrap emitter and return sse events.
+ * Event queue.
+ */
+
+var queue = new Queue;
+
+/**
+ * Wraps `e.emit` to emit sse events.
  *
  * @param {Emitter} e
  * @return {Function}
@@ -15,33 +22,37 @@ var slice = [].slice
  */
 
 module.exports = function (e) {
-  return function (done) {
-    var emit = e.emit
+  var emit = e.emit
 
-    e.emit = function (type) {
-      var args = slice.call(arguments, 1)
-      var out = ''
+  e.emit = function (type) {
+    var args = slice.call(arguments, 1)
+    var out = ''
 
-      // event with no arguments
-      if (args.length == 0) {
-        out += send('event', type)
-      }
-
-      // event with arguments
-      args.forEach(function (arg, i) {
-        if (typeof arg == 'object') arg = JSON.stringify(arg);
-
-        out += send('event', type)
-        out += send('data', arg)
-      })
-
-      out += end()
-
-      done(null, {
-        type: type,
-        out: out
-      })
+    // event with no arguments
+    if (args.length == 0) {
+      out += send('event', type)
     }
+
+    // event with arguments
+    args.forEach(function (arg, i) {
+      if (typeof arg == 'object') arg = JSON.stringify(arg);
+
+      out += send('event', type)
+      out += send('data', arg)
+    })
+
+    // end
+    out += '\n'
+
+    // push to queue to maintain event order
+    queue.push({
+      type: type,
+      out: out
+    })
+  }
+
+  return function *() {
+    return yield queue.next()
   }
 }
 
@@ -54,12 +65,4 @@ module.exports = function (e) {
 
 function send (type, args) {
   return type + ': ' + args + '\n'
-}
-
-/**
- * End sse line.
- */
-
-function end () {
-  return '\n'
 }

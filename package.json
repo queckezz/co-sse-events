@@ -4,7 +4,8 @@
   "devDependencies": {
     "mocha": "^1.18.2",
     "should": "^3.3.0",
-    "co": "^3.0.5"
+    "co": "^3.0.5",
+    "co-mocha": "0.0.2"
   },
   "dependencies": {
     "co-queue": "^2.0.0"

@@ -3,10 +3,11 @@ BIN = ./node_modules/.bin/
 
 test: node_modules
 	@$(BIN)mocha \
-		--require should \
+		--harmony \
 		--reporter dot \
 		--timeout 10000 \
-		--harmony \
+		--require should \
+		--require co-mocha \
 		--bail
 
 .PHONY: test
